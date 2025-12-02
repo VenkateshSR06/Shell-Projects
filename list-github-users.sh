@@ -1,22 +1,23 @@
-API_URL = "https://api.github.com"
+#!/bin/bash
+API_URL="https://api.github.com"
 
-USER_NAME = $username
-TOKEN = $token
+USER_NAME=$username
+TOKEN=$token
 
-REPO_OWNER = $1
-REPO_NAME = $2
+REPO_OWNER=$1
+REPO_NAME=$2
 
 function github_api_get{
-local endpoint = $1
-local url = "$(API_URL)/$(endpoint)"
+local endpoint=$1
+local url="$(API_URL)/$(endpoint)"
 
 curl -s -u "$USER_NAME:$TOKEN" "$url"
 }
 
 function list_users{
-local endpoint = "repos/$(REPO_OWNER)/$(REPO_NAME)/collaborators"
+local endpoint="repos/$(REPO_OWNER)/$(REPO_NAME)/collaborators"
 
-collaborators = $(github_api_get $endpoint | jq -r '.[] | select(.permissions.pull == true) | .login)
+collaborators=$(github_api_get $endpoint | jq -r '.[] | select(.permissions.pull == true) | .login)
 
 if [ -z $(collaborators) ];
 then
